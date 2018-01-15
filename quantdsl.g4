@@ -5,6 +5,10 @@ grammar quantdsl;
 */
 
 
+parse
+ : (contractDef)* EOF
+ ;
+
 
 contractDef : K_CONTRACT contractId K_IS instrumentDef K_END ';' 
     | K_CONTRACT contractId K_IS contractId K_AND contractId K_END ';' ;

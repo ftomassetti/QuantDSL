@@ -1,7 +1,7 @@
 # contract A is a call option, which expires on 01/21/2018.
 # The underlying for this contract is MSFT stock. 
 # The strike price is 53 USD
-# This option can only be exercised at maturity. Hence it is european exercise.
+# This option can only be exercised at maturity. Hence it supports european exercise.
 
 contract A is call option with
  - Currency: USD
@@ -14,7 +14,7 @@ end;
 # contract B is a put option, which expires on 03/15/2018.
 # The underlying for this contract is IBM stock
 # The strike price is 101 CHF
-# This option can be exercised anytime between now and its expiry. Hence it is american exercise.
+# This option can be exercised anytime between now and its expiry. Hence it supports american exercise.
 
 contract B is put option with
  - Currency: CHF
@@ -24,3 +24,5 @@ contract B is put option with
  - Exercise: american
 end;
 
+# combination of contracts A and B
+contract C is A and B;
