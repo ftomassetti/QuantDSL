@@ -30,6 +30,10 @@ cash
     : 'cashdef' /*todo*/
     ;
 
+parameter_clause : '(' ')' | '(' parameter_list ')' ;
+parameter_list : parameter (',' parameter)* ;
+
+
 
 optionDef : 'option' '(' K_CALL|K_PUT ','  
 
