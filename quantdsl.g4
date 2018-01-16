@@ -9,15 +9,32 @@ parse
  : (contractDef)* EOF
  ;
 
+contractDecl 
+    : Identifier (',' Identifier)* ':' 'contract' ';' 
+    ;
 
-contractDef : K_CONTRACT contractId K_IS instrumentDef K_END ';' 
-    | K_CONTRACT contractId K_IS contractId K_AND contractId K_END ';' ;
+
+contractDef 
+    : Identifier '=' instrumentDef ';' 
+    ;
+
+instrumentDef 
+    : (optionDef|swapDef|cash)
+    ;
+
+swapDef 
+    : 'swapdef' /*todo*/
+    ;
+
+cash 
+    : 'cashdef' /*todo*/
+    ;
 
 
-instrumentDef : (optionDef|swapDef|cash);
+optionDef : 'option' '(' K_CALL|K_PUT ','  
 
-swapDef : 'swapdef' /*todo*/;
-cash : 'cashdef' /*todo*/;
+
+
 
 
 
@@ -29,8 +46,6 @@ optionBody: /* todo: how to express this in any order? */
    '-' K_UNDERLYING ':' instrumentCode NEWLINE
    '-' K_EXERCISE ':' (K_EUROPEAN|K_AMERICAN|K_BERMUDAN) NEWLINE
    ;
-
-
 
 
 /*
@@ -45,58 +60,27 @@ two_digit: digit digit;
 four_digit :  digit digit digit digit;
 date : two_digit SLASH two_digit SLASH four_digit
 
-contractId : [a-zA-Z]+[0-9a-zA-Z]*;
+Identifier : [a-zA-Z]+[0-9a-zA-Z]*;
 instrumentCode : [a-zA-Z]+[0-9a-zA-Z]*; /* for the moment parse same as ID. In the future this should be parsed as isin or valoren */ 
 
 currencyDef : 'USD'|'CHF'|'EUR'|'GBP';  /* todo add more currencies */
 
 
-/* make keywords case insensitive. Is this a good thing? */
 
-K_CONTRACT : C O N T R A C T
-K_AND : A N D
-K_WITH : W I T H
-K_OPTION : O P T I O N;
-K_CALL : C A L L;
-K_PUT : P U T;
-K_WITH : W I T H;
-K_END : E N D;
-K_CURRENCY : C U R R E N C Y
-K_EXPIRY : E X P I R Y;
-K_UNDERLYING : U N D E R L Y I N G;
-K_EUROPEAN : E U R O P E A N;
-K_AMERICAN : A M E R I C A N;
-K_BERMUDAN : B E R M U D A N;
+K_COLON : ':';
+K_SEMICOLON : ';'
 
-
-
-fragment A : [aA];
-fragment B : [bB];
-fragment C : [cC];
-fragment D : [dD];
-fragment E : [eE];
-fragment F : [fF];
-fragment G : [gG];
-fragment H : [hH];
-fragment I : [iI];
-fragment J : [jJ];
-fragment K : [kK];
-fragment L : [lL];
-fragment M : [mM];
-fragment N : [nN];
-fragment O : [oO];
-fragment P : [pP];
-fragment Q : [qQ];
-fragment R : [rR];
-fragment S : [sS];
-fragment T : [tT];
-fragment U : [uU];
-fragment V : [vV];
-fragment W : [wW];
-fragment X : [xX];
-fragment Y : [yY];
-fragment Z : [zZ];
-
+K_CONTRACT : 'contract';
+K_AND : 'and'
+K_OPTION : 'option';
+K_CALL : 'call';
+K_PUT : 'put';
+K_CURRENCY : 'currency'
+K_EXPIRY : 'expiry';
+K_UNDERLYING : 'underlying';
+K_EUROPEAN : 'european';
+K_AMERICAN : 'american';
+K_BERMUDAN : 'bermudan';
 
 
 
