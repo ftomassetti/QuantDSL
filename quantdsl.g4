@@ -5,10 +5,21 @@ grammar quantdsl;
 */
 
 
-parse
- : (contractDef)* EOF
- ;
 
+start
+    : statement+
+    ;
+
+statement
+    : contractDecl
+    | contractDef
+    ;
+
+
+
+
+
+/* in our DSL a contract is a builtin type */
 contractDecl 
     : Identifier (',' Identifier)* ':' 'contract' ';' 
     ;
@@ -18,40 +29,45 @@ contractDef
     : Identifier '=' instrumentDef ';' 
     ;
 
+
 instrumentDef 
-    : (optionDef|swapDef|cash)
+    : optionDef /* we only support options at the moment */
     ;
 
-swapDef 
-    : 'swapdef' /*todo*/
+optionDef
+    : 'option' parameter_clause
     ;
 
-cash 
-    : 'cashdef' /*todo*/
-    ;
+andOperator : 'and' '('identifier ',' identifier ')' ';'
 
-parameter_clause : '(' ')' | '(' parameter_list ')' ;
+
+
+parameter_clause : '(' parameter_list ')' ;
 parameter_list : parameter (',' parameter)* ;
 parameter
-    : 
+    : Identifier
+    | date
+    | currency
+    | instrument_code
+    | option_type
+    | option_style
+    ;
+
+option_style
+    : 'european'
+    | 'american'
+    | 'bermudan'
+    ;
+
+option_type
+    : 'call'
+    | 'put'
+    ;
 
 
-
-optionDef : 'option' '(' K_CALL|K_PUT ','  
-
-
-
-
-
-
-optionDef : (K_CALL|K_PUT) K_OPTION K_WITH NEWLINE optionBody;
-
-optionBody: /* todo: how to express this in any order? */
-   '-' K_CURRENCY ':' currencyDef NEWLINE 
-   '-' K_EXPIRY ':' date NEWLINE
-   '-' K_UNDERLYING ':' instrumentCode NEWLINE
-   '-' K_EXERCISE ':' (K_EUROPEAN|K_AMERICAN|K_BERMUDAN) NEWLINE
-   ;
+instrument_code 
+    : ReutersRic /* for the moment we support only reuters codes */ 
+    ;  
 
 
 /*
@@ -59,26 +75,24 @@ optionBody: /* todo: how to express this in any order? */
 */
 
 WHITESPACE : ' ' -> skip ;
-NEWLINE : [\r\n] ;
 SLASH : '/'
 DIGIT : [0-9] ;
 two_digit: digit digit;
 four_digit :  digit digit digit digit;
 date : two_digit SLASH two_digit SLASH four_digit
 
+ReutersRIC : [A-Z]{1,4}\.[A-Z]{1,2}; 
 Identifier : [a-zA-Z]+[0-9a-zA-Z]*;
-instrumentCode : [a-zA-Z]+[0-9a-zA-Z]*; /* for the moment parse same as ID. In the future this should be parsed as isin or valoren */ 
 
-currencyDef : 'USD'|'CHF'|'EUR'|'GBP';  /* todo add more currencies */
+currency 
+    : 'USD'
+    |'CHF'
+    |'EUR'
+    |'GBP'   /* todo add more currencies */
+    ; 
 
 
 
-K_COLON : ':';
-K_SEMICOLON : ';'
-
-K_CONTRACT : 'contract';
-K_AND : 'and'
-K_OPTION : 'option';
 K_CALL : 'call';
 K_PUT : 'put';
 K_CURRENCY : 'currency'

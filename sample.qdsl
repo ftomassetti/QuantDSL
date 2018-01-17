@@ -1,0 +1,22 @@
+# contract optionA is a call option, which expires on 01/21/2018.
+# The underlying for this contract is MSFT stock. 
+# The strike price is 53 USD
+# This option can only be exercised at maturity. Hence it supports european exercise.
+
+# contract  optionB is a put option, which expires on 03/15/2018.
+# The underlying for this contract is IBM stock
+# The strike price is 101 CHF
+# This option can be exercised anytime between now and its expiry. Hence it supports american exercise.
+
+
+
+optionA, optionB, optionC : contract;
+optionA = option(call, 01/21/2018, MSFT.OQ, 53, USD, european);
+optionB = option(put, 03/15/2018, IBM.N, 101, CHF, american);
+
+# combination of contracts 
+
+optionC = and(optionA, optionB);
+
+
+
