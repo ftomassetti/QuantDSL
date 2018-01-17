@@ -81,7 +81,7 @@ two_digit: DIGIT DIGIT;
 four_digit :  DIGIT DIGIT DIGIT DIGIT;
 date : two_digit SLASH two_digit SLASH four_digit;
 
-ReutersRIC : [A-Z]{1,4}'.'[A-Z]{1,2}; 
+ReutersRIC : [A-Z]([A-Z]([A-Z]([A-Z])?)?)?'.'[A-Z]([A-Z])?;
 Identifier : [a-zA-Z]+[0-9a-zA-Z]*;
 
 currency 
