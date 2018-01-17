@@ -11,3 +11,12 @@ The typical approach taken by pricing libraries such as QuantLib is to force you
 However, we believe that using a general-purpose language to implement a contract pricing library is a flawed approach in the first place. Instead we have taken the DSL approach where a "mini-language" is created in order represent core financial concepts in a flexible way.     
 
 The core principle behind QuantDSL is its declarative nature: you describe the key characteristics of a derivative contract, and then let the QuantDSL runtime figure out how to price it. 
+
+## Compilation
+
+To generate the lexer and parser using antlr run:
+
+```
+# it is gradlew.bat on Windows
+./gradlew generateGrammarSouce
+```
