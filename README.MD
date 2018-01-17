@@ -1,5 +1,7 @@
 # QuantDSL
 
+[![Build Status](https://travis-ci.org/ftomassetti/QuantDSL.svg?branch=master)](https://travis-ci.org/ftomassetti/QuantDSL)
+
 QuantDSL is a domain-specific language for quantitative finance. With QuantDSL,  you can define financial contracts using a declarative syntax. Once you have defined a contract, you can use that definition to:
 
 - Price the contract
