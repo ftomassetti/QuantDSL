@@ -91,16 +91,3 @@ currency
     |'GBP'   /* todo add more currencies */
     ; 
 
-
-
-K_CALL : 'call';
-K_PUT : 'put';
-K_CURRENCY : 'currency'
-K_EXPIRY : 'expiry';
-K_UNDERLYING : 'underlying';
-K_EUROPEAN : 'european';
-K_AMERICAN : 'american';
-K_BERMUDAN : 'bermudan';
-
-
-
