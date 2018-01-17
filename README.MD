@@ -20,3 +20,14 @@ To generate the lexer and parser using antlr run:
 # it is gradlew.bat on Windows
 ./gradlew generateGrammarSouce
 ```
+
+## IntelliJ IDEA Project files
+
+These files can be generated locally by running:
+
+```
+# it is gradlew.bat on Windows
+./gradlew idea
+```
+
+Given they are generated they are not committed.
