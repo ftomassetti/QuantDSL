@@ -16,9 +16,6 @@ statement
     ;
 
 
-
-
-
 /* in our DSL a contract is a builtin type */
 contractDecl 
     : Identifier (',' Identifier)* ':' 'contract' ';' 
@@ -40,8 +37,8 @@ optionDef
     ;
 
 andExpression 
-    : 'and' '('identifier ',' identifier ')' ';'
-    | identifier 'and' identifier ';'
+    : 'and' '('Identifier ',' Identifier ')' ';'
+    | Identifier 'and' Identifier ';'
     ;
 
 
@@ -78,13 +75,13 @@ instrument_code
 */
 
 WHITESPACE : ' ' -> skip ;
-SLASH : '/'
+SLASH : '/' ;
 DIGIT : [0-9] ;
-two_digit: digit digit;
-four_digit :  digit digit digit digit;
-date : two_digit SLASH two_digit SLASH four_digit
+two_digit: DIGIT DIGIT;
+four_digit :  DIGIT DIGIT DIGIT DIGIT;
+date : two_digit SLASH two_digit SLASH four_digit;
 
-ReutersRIC : [A-Z]{1,4}\.[A-Z]{1,2}; 
+ReutersRIC : [A-Z]{1,4}'.'[A-Z]{1,2}; 
 Identifier : [a-zA-Z]+[0-9a-zA-Z]*;
 
 currency 
