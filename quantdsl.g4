@@ -26,7 +26,8 @@ contractDecl
 
 
 contractDef 
-    : Identifier '=' instrumentDef ';' 
+    : Identifier '=' instrumentDef ';'
+    | Identifier '=' andExpression ';' 
     ;
 
 
@@ -38,8 +39,10 @@ optionDef
     : 'option' parameter_clause
     ;
 
-andOperator : 'and' '('identifier ',' identifier ')' ';'
-
+andExpression 
+    : 'and' '('identifier ',' identifier ')' ';'
+    | identifier 'and' identifier ';'
+    ;
 
 
 parameter_clause : '(' parameter_list ')' ;
