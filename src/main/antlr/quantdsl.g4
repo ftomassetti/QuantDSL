@@ -4,41 +4,51 @@ grammar quantdsl;
 * Parser Rules
 */
 
-
-
-start
-    : statement+
+file : (contract_decl|stat)+
     ;
 
-statement
-    : contractDecl
-    | contractDef
-    ;
 
 
 /* in our DSL a contract is a builtin type */
-contractDecl 
-    : Identifier (',' Identifier)* ':' 'contract' ';' 
+contract_decl 
+    : contract_type identifier ('=' instrument_initializer) ';'
+    ;
+
+contract_type
+    : 'option'
+    | 'swap'
+    | 'bond'
     ;
 
 
-contractDef 
-    : Identifier '=' instrumentDef ';'
-    | Identifier '=' andExpression ';' 
+instrument_initializer
+    : option_initializer
+    | swap_initializer
+    ;
+
+option_initializer
+    : 'option' '(' option_type ',' date ',' reuters_ric ',' number ',' currency ',' option_style ')' 
+    ;
+
+swap_initializer
+    : 'swap'
+    ;
+
+stat
+    : identifier '=' instrument_initializer ';'
+    | identifier '=' identifier ';'
+    | identifier '=' and_expr ';'
+    | price_stat ';'
     ;
 
 
-instrumentDef 
-    : optionDef /* we only support options at the moment */
-    ;
-
-optionDef
-    : 'option' parameter_clause
-    ;
-
-andExpression 
+and_expr
     : 'and' '('Identifier ',' Identifier ')' ';'
     | Identifier 'and' Identifier ';'
+    ;
+
+price_stat
+    : 'price' '(' Identifier ')' + ';'
     ;
 
 
@@ -82,7 +92,7 @@ four_digit :  DIGIT DIGIT DIGIT DIGIT;
 date : two_digit SLASH two_digit SLASH four_digit;
 
 ReutersRIC : [A-Z]([A-Z]([A-Z]([A-Z])?)?)?'.'[A-Z]([A-Z])?;
-Identifier : [a-zA-Z]+[0-9a-zA-Z]*;
+identifier : [a-zA-Z]+[0-9a-zA-Z]*;
 
 currency 
     : 'USD'
