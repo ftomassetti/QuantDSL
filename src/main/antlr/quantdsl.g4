@@ -50,17 +50,6 @@ parameter
     | OPTION_STYLE
     ;
 
-OPTION_STYLE
-    : 'european'
-    | 'american'
-    | 'bermudan'
-    ;
-
-OPTION_TYPE
-    : 'call'
-    | 'put'
-    ;
-
 instrument_code 
     : REUTERS_RIC /* for the moment we support only reuters codes */
     ;  
@@ -73,15 +62,15 @@ LINE_COMMENT : '#' ~[\r\n]* -> skip ;
 WHITESPACE : [ \t\r\n\u000C]+ -> skip ;
 
 SLASH : '/' ;
-fragment DIGIT : [0-9] ;
 
+// We enclose Reuters Rics between square brackets so we can recognize them from common identifiers
 REUTERS_RIC : '[' [A-Z]+ '.' [A-Z]+ ']';
 IDENTIFIER : [a-zA-Z]+[0-9a-zA-Z]*;
 
+fragment DIGIT : [0-9] ;
+
 NUMBER : DIGIT+ ('.' DIGIT+)? ;
-
 DATE : DIGIT+ SLASH DIGIT+ SLASH DIGIT+;
-
 
 CURRENCY
     :'USD'
@@ -90,3 +79,13 @@ CURRENCY
     |'GBP'   /* todo add more currencies */
     ; 
 
+OPTION_STYLE
+    : 'european'
+    | 'american'
+    | 'bermudan'
+    ;
+
+OPTION_TYPE
+    : 'call'
+    | 'put'
+    ;
