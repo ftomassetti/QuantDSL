@@ -10,10 +10,13 @@
 
 
 
-optionA, optionB, optionC : contract;
-optionA = option(call, 01/21/2018, [MSFT.OQ], 53, USD, european);
-optionB = option(put, 03/15/2018, [IBM.N], 101, CHF, american);
+#optionA, optionB, optionC : contract;
+#optionA = option(call, 01/21/2018, MSFT.OQ, 53, USD, european);
+#optionB = option(put, 03/15/2018, IBM.N, 101, CHF, american);
 
-# combination of contracts
+# combination of contracts 
 
-optionC = and(optionA, optionB);
+#optionC = and(optionA, optionB);
+
+
+

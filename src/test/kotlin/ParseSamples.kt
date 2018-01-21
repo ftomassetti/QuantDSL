@@ -11,9 +11,7 @@ import kotlin.test.assertTrue
 
 class ParseSamples {
 
-    @Test
-    fun parseSample() {
-        val file = File("examples/sample.qdsl")
+    private fun tryToParse(file: File) : quantdslParser.QuantProgramContext {
         val ais = ANTLRInputStream(FileInputStream(file))
         val lexer = quantdslLexer(ais)
         val errors = LinkedList<String>()
@@ -24,7 +22,7 @@ class ParseSamples {
             }
 
             override fun syntaxError(recognizer: Recognizer<*, *>?, offendingSymbol: Any?, line: Int, charPositionInLine: Int, msg: String?, e: RecognitionException?) {
-                errors.add("Error in example at line $line: $msg")
+                errors.add("Error in example at line $line, col $charPositionInLine: $msg")
             }
 
             override fun reportAmbiguity(recognizer: Parser?, dfa: DFA?, startIndex: Int, stopIndex: Int, exact: Boolean, ambigAlts: BitSet?, configs: ATNConfigSet?) {
@@ -43,7 +41,7 @@ class ParseSamples {
             }
 
             override fun syntaxError(recognizer: Recognizer<*, *>?, offendingSymbol: Any?, line: Int, charPositionInLine: Int, msg: String?, e: RecognitionException?) {
-                errors.add("Error in example at line $line: $msg")
+                errors.add("Error in example at line $line, col $charPositionInLine: $msg")
             }
 
             override fun reportAmbiguity(recognizer: Parser?, dfa: DFA?, startIndex: Int, stopIndex: Int, exact: Boolean, ambigAlts: BitSet?, configs: ATNConfigSet?) {
@@ -54,11 +52,22 @@ class ParseSamples {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
-        parser.start()
+        val ast = parser.quantProgram()
         errors.forEach {
             System.err.println(it)
         }
         assertTrue(errors.isEmpty())
+        return ast
+    }
+
+    @Test
+    fun parseSample() {
+        tryToParse(File("examples/sample.qdsl"))
+    }
+
+    @Test
+    fun parseOnlyComments() {
+        tryToParse(File("src/test/resources/justcomments.qdsl"))
     }
 
 }

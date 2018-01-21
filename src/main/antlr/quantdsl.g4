@@ -1,13 +1,11 @@
 grammar quantdsl;
 
 /*
-* Parser Rules
-*/
+ * Parser Rules
+ */
 
-
-
-start
-    : statement+
+quantProgram
+    : statement* EOF
     ;
 
 statement
@@ -15,16 +13,15 @@ statement
     | contractDef
     ;
 
-
 /* in our DSL a contract is a builtin type */
 contractDecl 
-    : Identifier (',' Identifier)* ':' 'contract' ';' 
+    : IDENTIFIER (',' IDENTIFIER)* ':' 'contract' ';'
     ;
 
 
 contractDef 
-    : Identifier '=' instrumentDef ';'
-    | Identifier '=' andExpression ';' 
+    : IDENTIFIER '=' instrumentDef ';'
+    | IDENTIFIER '=' andExpression ';'
     ;
 
 
@@ -37,55 +34,57 @@ optionDef
     ;
 
 andExpression 
-    : 'and' '('Identifier ',' Identifier ')' ';'
-    | Identifier 'and' Identifier ';'
+    : 'and' '('IDENTIFIER ',' IDENTIFIER ')'
+    | IDENTIFIER 'and' IDENTIFIER
     ;
-
 
 parameter_clause : '(' parameter_list ')' ;
-parameter_list : parameter (',' parameter)* ;
+parameter_list : (parameter (',' parameter)*)? ;
 parameter
-    : Identifier
-    | date
-    | currency
+    : IDENTIFIER
+    | DATE
+    | CURRENCY
+    | NUMBER
     | instrument_code
-    | option_type
-    | option_style
+    | OPTION_TYPE
+    | OPTION_STYLE
     ;
 
-option_style
+OPTION_STYLE
     : 'european'
     | 'american'
     | 'bermudan'
     ;
 
-option_type
+OPTION_TYPE
     : 'call'
     | 'put'
     ;
 
-
 instrument_code 
-    : ReutersRic /* for the moment we support only reuters codes */ 
+    : REUTERS_RIC /* for the moment we support only reuters codes */
     ;  
-
 
 /*
  * Lexer Rules
-*/
+ */
 
-WHITESPACE : ' ' -> skip ;
+LINE_COMMENT : '#' ~[\r\n]* -> skip ;
+WHITESPACE : [ \t\r\n\u000C]+ -> skip ;
+
 SLASH : '/' ;
-DIGIT : [0-9] ;
-two_digit: DIGIT DIGIT;
-four_digit :  DIGIT DIGIT DIGIT DIGIT;
-date : two_digit SLASH two_digit SLASH four_digit;
+fragment DIGIT : [0-9] ;
 
-ReutersRIC : [A-Z]([A-Z]([A-Z]([A-Z])?)?)?'.'[A-Z]([A-Z])?;
-Identifier : [a-zA-Z]+[0-9a-zA-Z]*;
+REUTERS_RIC : '[' [A-Z]+ '.' [A-Z]+ ']';
+IDENTIFIER : [a-zA-Z]+[0-9a-zA-Z]*;
 
-currency 
-    : 'USD'
+NUMBER : DIGIT+ ('.' DIGIT+)? ;
+
+DATE : DIGIT+ SLASH DIGIT+ SLASH DIGIT+;
+
+
+CURRENCY
+    :'USD'
     |'CHF'
     |'EUR'
     |'GBP'   /* todo add more currencies */
